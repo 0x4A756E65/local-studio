@@ -143,6 +143,15 @@ switch for models from the user's Pi catalog and providers connected in
 Configure. Those opt-in models use Pi's native provider routing without adding
 saved inactive controllers to the session.
 
+Bonsai 2 27B controller models are recognized as reasoning-capable from their
+model IDs, including `bonsai-2-27b` and the `Ternary-Bonsai-2-27B` GGUF names.
+Their reasoning picker offers Off, Medium, and High. These send Prism's
+supported `reasoning_effort` values `none`, `medium`, and `xhigh`,
+respectively. Off explicitly disables thinking instead of falling back to the
+server's default. Low is omitted because [Prism documents that it behaves close
+to xhigh](https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf#best-practices).
+A server-side reasoning token budget still applies separately.
+
 New Workbench chats start with Pi's `read`, `grep`, `find`, and `ls` tools. Full
 access enables every tool registered in that Pi session, including extension
 tools. Read only is a model-tool allowlist, not an operating-system sandbox,

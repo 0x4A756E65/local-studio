@@ -9,6 +9,7 @@ import type { OpenAICompletionsCompat } from "@earendil-works/pi-ai";
 import {
   normalizeOpenAIModels,
   inferReasoningSupport,
+  isBonsai2ModelId,
   type AgentModel,
 } from "../../../shared/agent/models";
 import { AGENT_THINKING_LEVELS, type AgentThinkingLevel } from "../../../shared/agent/agent-turn";
@@ -143,6 +144,9 @@ export function controllerModelThinkingLevels(
   reasoning: boolean,
   modelId = "",
 ): AgentThinkingLevel[] {
+  if (reasoning && isBonsai2ModelId(modelId)) {
+    return ["off", "medium", "high"];
+  }
   if (reasoning && isInklingModelId(modelId)) {
     return ["off", "minimal", "low", "medium", "high", "max"];
   }
@@ -473,6 +477,16 @@ const CONTROLLER_THINKING_LEVEL_MAP = {
   max: "max",
 } as const;
 
+const BONSAI2_THINKING_LEVEL_MAP = {
+  off: "none",
+  minimal: null,
+  low: null,
+  medium: "medium",
+  high: "xhigh",
+  xhigh: null,
+  max: null,
+} as const;
+
 export function modelsToPiModels(models: AgentModel[]) {
   return models.map((model) => {
     // The hosted DeepSeek API uses a `thinking` object and requires an empty
@@ -483,6 +497,7 @@ export function modelsToPiModels(models: AgentModel[]) {
     const deepSeekReasoning =
       isDeepSeekReasoningModel(model) && !isControllerBackedModel(model);
     const inklingReasoning = isInklingReasoningModel(model);
+    const bonsai2Reasoning = model.reasoning && isBonsai2ModelId(model.rawId ?? model.id);
     return {
       id: model.rawId ?? model.id,
       name: model.name,
@@ -492,7 +507,9 @@ export function modelsToPiModels(models: AgentModel[]) {
       contextWindow: model.contextWindow,
       maxTokens: model.maxTokens,
       cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
-      ...(model.controllerUrl && model.reasoning
+      ...(bonsai2Reasoning
+        ? { thinkingLevelMap: BONSAI2_THINKING_LEVEL_MAP }
+        : model.controllerUrl && model.reasoning
         ? { thinkingLevelMap: CONTROLLER_THINKING_LEVEL_MAP }
         : deepSeekReasoning
         ? {

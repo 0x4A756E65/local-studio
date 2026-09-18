@@ -42,6 +42,10 @@ export interface AgentModel {
   active: boolean;
 }
 
+export function isBonsai2ModelId(modelId: string): boolean {
+  return /(?:^|[/\s_-])bonsai[\s_-]+2[\s_-]+27b(?:$|[.\s/_-])/i.test(modelId);
+}
+
 export function inferReasoningSupport(modelId: string): boolean {
   const normalized = modelId.toLowerCase();
   return (
@@ -52,7 +56,8 @@ export function inferReasoningSupport(modelId: string): boolean {
     normalized.includes("inkling") ||
     normalized.includes("qwen3") ||
     normalized.includes("glm-5") ||
-    normalized.includes("mimo")
+    normalized.includes("mimo") ||
+    isBonsai2ModelId(modelId)
   );
 }
 
