@@ -145,7 +145,11 @@ export function controllerModelThinkingLevels(
   modelId = "",
 ): AgentThinkingLevel[] {
   if (reasoning && isBonsai2ModelId(modelId)) {
-    return ["off", "medium", "high"];
+    return supportedPiThinkingLevels(
+      { id: modelId, thinkingLevelMap: BONSAI2_THINKING_LEVEL_MAP },
+      reasoning,
+      { supportsReasoningEffort: true },
+    );
   }
   if (reasoning && isInklingModelId(modelId)) {
     return ["off", "minimal", "low", "medium", "high", "max"];

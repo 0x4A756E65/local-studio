@@ -144,7 +144,8 @@ Configure. Those opt-in models use Pi's native provider routing without adding
 saved inactive controllers to the session.
 
 Bonsai 2 27B controller models are recognized as reasoning-capable from their
-model IDs, including `bonsai-2-27b` and the `Ternary-Bonsai-2-27B` GGUF names.
+model IDs, including `bonsai-2-27b`, tagged aliases such as `bonsai-2-27b:latest`,
+and the `Ternary-Bonsai-2-27B` GGUF names.
 Their reasoning picker offers Off, Medium, and High. These send Prism's
 supported `reasoning_effort` values `none`, `medium`, and `xhigh`,
 respectively. Off explicitly disables thinking instead of falling back to the

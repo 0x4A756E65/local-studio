@@ -43,7 +43,7 @@ export interface AgentModel {
 }
 
 export function isBonsai2ModelId(modelId: string): boolean {
-  return /(?:^|[/\s_-])bonsai[\s_-]+2[\s_-]+27b(?:$|[.\s/_-])/i.test(modelId);
+  return /(?:^|[/\s_-])bonsai[\s_-]+2[\s_-]+27b(?:$|[.:\s/_-])/i.test(modelId);
 }
 
 export function inferReasoningSupport(modelId: string): boolean {
